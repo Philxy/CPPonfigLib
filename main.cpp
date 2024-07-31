@@ -7,7 +7,11 @@ constexpr double earthAcceleration(9.81);
 constexpr double moonAcceleration(1.62);
 } // namespace constants
 
+namespace physics {
+double calculateForce(double mass, double acceleration) {
+  return mass * acceleration;
+}
 
-
+} // namespace physics
 
 int main() { constants::pi; }
