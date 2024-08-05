@@ -1,4 +1,4 @@
-#include "../include/config.h"
+#include "../include/configkit/config.h"
 
 namespace config
 {

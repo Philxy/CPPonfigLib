@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/config.h"
+#include "../include/configkit/config.h"
 
 int main()
 {
