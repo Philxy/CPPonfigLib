@@ -1,6 +1,6 @@
 #include "../include/configkit/config.h"
 
-namespace config
+namespace configkit
 {
 
     Config::Config(std::string configurationPath)

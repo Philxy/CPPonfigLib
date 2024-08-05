@@ -6,7 +6,7 @@
 #include <iostream>
 #include <algorithm>
 
-namespace config
+namespace configkit
 {
     class Config
     {
