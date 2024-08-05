@@ -24,6 +24,7 @@ Below is an example of how to use the API with the provided configuration file:
 
 ```cpp
 #include "configkit/config.h"
+#include <string>
 
 int main() {
     // Load configuration file
