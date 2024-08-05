@@ -18,6 +18,7 @@ namespace config
         void parseLine(std::string line, int lineNumber);
         std::unordered_map<std::string, std::string> configMap;
         friend class UnitTest;
+        std::string removeComments(const std::string &line);
 
     public:
         Config(std::string configurationPath);

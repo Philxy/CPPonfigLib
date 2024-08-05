@@ -24,6 +24,17 @@ namespace config
         }
     }
 
+    std::string Config::removeComments(const std::string &line)
+    {
+        const char commentDelimiter = '#';
+        size_t commentPosition = line.find(commentDelimiter);
+        if (commentPosition != std::string::npos)
+        {
+            return line.substr(0, commentPosition);
+        }
+        return line;
+    }
+
     void Config::parseLine(std::string line, int lineNumber)
     {
         if (line.empty())
@@ -35,9 +46,11 @@ namespace config
         {
             return;
         }
-        const char delimiter = '=';
 
+        const char delimiter = '=';
         size_t delimiterPosition = line.find(delimiter);
+
+        line = removeComments(line);
 
         if (delimiterPosition == std::string::npos)
         {
@@ -45,7 +58,7 @@ namespace config
         }
 
         std::string leftHandSide = trim(line.substr(0, delimiterPosition));
-        std::string rightHandSide = trim(line.substr(delimiterPosition + 1));
+        std::string rightHandSide = trim(line.substr(delimiterPosition + 1, std::string::npos));
 
         // Check for empty keys or values
         if (leftHandSide.empty())
