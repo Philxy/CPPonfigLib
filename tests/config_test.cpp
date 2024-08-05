@@ -12,7 +12,7 @@ namespace config
     void UnitTest::testConfig()
     {
         // Test case 1: Check if configuration file is loaded correctly
-        config::Config configuration("config.txt");
+        config::Config configuration("example_configuration.txt");
 
         double piConverted = config::convertToType<double>(configuration.getParameter("pi"));
 
