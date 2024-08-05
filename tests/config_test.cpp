@@ -14,33 +14,35 @@ namespace config
         // Test case 1: Check if configuration file is loaded correctly
         config::Config configuration("example_configuration.txt");
 
-        double piConverted = config::convertToType<double>(configuration.getParameter("pi"));
+        // Test case 2: Assuming there are 3 key-value pairs in the config file
+        assert(configuration.configMap.size() == 4);
 
-        int NConverted = config::convertToType<int>(configuration.getParameter("N"));
-
-        bool useGravityConverted = config::convertToType<bool>(configuration.getParameter("useGravity"));
-
-        std::cout << "pi = " << piConverted << std::endl;
-        std::cout << "N = " << NConverted << std::endl;
-        std::cout << "useGravity = " << useGravityConverted << std::endl;
-        std::cout << "speed_light = " << configuration.getParameter("speed_light") << std::endl;
-
-        assert(configuration.configMap.size() == 4); // Assuming there are 3 key-value pairs in the config file
-
-        // Test case 2: Check if parameter values are retrieved correctly
+        // Test case 3: Check if parameter values are retrieved correctly
         assert(configuration.configMap.at("pi") == "3.14159265359");
         assert(configuration.configMap.at("useGravity") == "true");
-        assert(configuration.configMap.at("speed_light") == "299792458.0");
+        assert(configuration.configMap.at("speed_of_light") == "299792458");
+        assert(configuration.configMap.at("path") == "/home/user/data");
 
-        // Test case 3: Check if parameter values are converted correctly
+        // Test case 4: Check if parameter values are converted correctly
         double pi = convertToType<double>(configuration.configMap.at("pi"));
         assert(pi == 3.14159265359);
 
-        int N = convertToType<int>(configuration.configMap.at("N"));
-        assert(N == 1);
-
         bool useGravity = convertToType<bool>(configuration.configMap.at("useGravity"));
         assert(useGravity == true);
+
+        std::string path = convertToType<std::string>(configuration.configMap.at("path"));
+        assert(path == std::string("/home/user/data"));
+
+        int speedOfLight = convertToType<int>(configuration.configMap.at("speed_of_light"));
+        assert(speedOfLight == 299792458);
+
+        // Test case 5: Check if the public api works correctly
+        assert(configuration.getParameter<double>("pi") == 3.14159265359);
+        assert(configuration.getParameter<bool>("useGravity") == true);
+        assert(configuration.getParameter<std::string>("path") == std::string("/home/user/data"));
+        assert(configuration.getParameter<int>("speed_of_light") == 299792458);
+
+        std::cout << "All tests passed!" << std::endl;
     }
 }
 

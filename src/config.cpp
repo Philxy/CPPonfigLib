@@ -73,7 +73,7 @@ namespace config
         configMap[leftHandSide] = rightHandSide;
     }
 
-    std::string Config::getParameter(std::string parameterName)
+    std::string Config::getParameterFromMap(const std::string &parameterName)
     {
         if (configMap.find(parameterName) == configMap.end())
         {

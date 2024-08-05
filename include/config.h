@@ -19,10 +19,12 @@ namespace config
         std::unordered_map<std::string, std::string> configMap;
         friend class UnitTest;
         std::string removeComments(const std::string &line);
+        std::string getParameterFromMap(const std::string &parameterName);
 
     public:
         Config(std::string configurationPath);
-        std::string getParameter(std::string parameterName);
+        template <typename T>
+        T getParameter(const std::string &parameterName);
     };
 
     template <typename T>
@@ -48,6 +50,12 @@ namespace config
         {
             throw std::runtime_error("Unsupported type");
         }
+    }
+
+    template <typename T>
+    T Config::getParameter(const std::string &parameterName)
+    {
+        return convertToType<T>(getParameterFromMap(parameterName));
     }
 
 }
