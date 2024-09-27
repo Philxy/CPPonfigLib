@@ -1,1 +1,0 @@
-g++ -o TESTS src/config.cpp  tests/config_test.cpp
