@@ -1,7 +1,7 @@
-#include "../include/config.h"
+#include "../include/configkit/config.h"
 #include <cassert>
 
-namespace config
+namespace configkit
 {
     class UnitTest
     {
@@ -12,10 +12,10 @@ namespace config
     void UnitTest::testConfig()
     {
         // Test case 1: Check if configuration file is loaded correctly
-        config::Config configuration("example_configuration.txt");
+        configkit::Config configuration("example_configuration.txt");
 
         // Test case 2: Assuming there are 3 key-value pairs in the config file
-        assert(configuration.configMap.size() == 4);
+        assert(configuration.configMap.size() == 6);
 
         // Test case 3: Check if parameter values are retrieved correctly
         assert(configuration.configMap.at("pi") == "3.14159265359");
@@ -41,6 +41,8 @@ namespace config
         assert(configuration.getParameter<bool>("useGravity") == true);
         assert(configuration.getParameter<std::string>("path") == std::string("/home/user/data"));
         assert(configuration.getParameter<int>("speed_of_light") == 299792458);
+        assert((configuration.getParameter<std::vector<int>>("vec") == std::vector<int>{1, 2, 3}));
+        assert((configuration.getParameter<std::vector<double>>("vecd") == std::vector<double>{1.12, -1.412E1}));
 
         std::cout << "All tests passed!" << std::endl;
     }
@@ -48,7 +50,7 @@ namespace config
 
 int main()
 {
-    config::UnitTest test;
+    configkit::UnitTest test;
     test.testConfig();
     return 0;
 }

@@ -6,21 +6,30 @@ namespace configkit
     Config::Config(std::string configurationPath)
         : configurationPath(configurationPath)
     {
-        loadConfiguration();
-        parseConfiguration();
+        initialize();
     }
 
-    void Config::parseConfiguration()
+    void Config::initialize()
+    {
+        readConfigurationFile();
+        populateConfigMap();
+    }
+
+    void Config::populateConfigMap()
     {
         std::istringstream configurationStream(configurationFileContent);
         std::string line;
-        const char delimiter = '=';
-
         int lineNumber = 0;
-        while (std::getline(configurationStream, line))
+
+        std::function<void(const std::string &)> processLine = [this, &lineNumber](const std::string &line)
         {
             lineNumber++;
             parseLine(line, lineNumber);
+        };
+
+        while (std::getline(configurationStream, line))
+        {
+            processLine(line);
         }
     }
 
@@ -37,24 +46,25 @@ namespace configkit
 
     void Config::parseLine(std::string line, int lineNumber)
     {
+        line = trim(line); // Remove leading and trailing whitespaces
+
         if (line.empty())
         {
             return;
         }
 
-        if (line[0] == '#')
+        if (commentDelimiters.find(line[0]) != commentDelimiters.end())
         {
             return;
         }
 
-        const char delimiter = '=';
-        size_t delimiterPosition = line.find(delimiter);
-
         line = removeComments(line);
+
+        size_t delimiterPosition = line.find(delimiter);
 
         if (delimiterPosition == std::string::npos)
         {
-            throw std::runtime_error("Error in configuration file at line " + std::to_string(lineNumber) + ": Missing delimiter '='");
+            throw std::runtime_error("Error in configuration file at line " + std::to_string(lineNumber) + ": Missing delimiter '" + delimiter + "' in line: '" + line + "'");
         }
 
         std::string leftHandSide = trim(line.substr(0, delimiterPosition));
@@ -70,19 +80,28 @@ namespace configkit
             throw std::runtime_error("Error in configuration file at line " + std::to_string(lineNumber) + ": Empty value for key '" + leftHandSide + "'");
         }
 
+        // Check for duplicate keys
+        if (configMap.find(leftHandSide) != configMap.end())
+        {
+            throw std::runtime_error("Error in configuration file at line " + std::to_string(lineNumber) + ": Duplicate key '" + leftHandSide + "' found");
+        }
+
         configMap[leftHandSide] = rightHandSide;
     }
 
     std::string Config::getParameterFromMap(const std::string &parameterName)
     {
-        if (configMap.find(parameterName) == configMap.end())
+        try
+        {
+            return configMap.at(parameterName);
+        }
+        catch (const std::out_of_range &)
         {
             throw std::runtime_error("Parameter not found: " + parameterName);
         }
-        return configMap[parameterName];
     }
 
-    void Config::loadConfiguration()
+    void Config::readConfigurationFile()
     {
         std::ifstream configFile(configurationPath);
         if (!configFile.is_open())

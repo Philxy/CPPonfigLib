@@ -1,5 +1,10 @@
-# Important Parameters:
-speed_light = 299792458.0     # in meters per second
+# Important parameters:
+speed_of_light = 299792458     # in meters per second
 useGravity = true
-pi = 3.14159265359
-N = 1
+
+[More crucial parameters]
+pi = 3.14159265359              
+path = /home/user/data      
+vec = 1 2 3                     # I am a vector!
+
+vecd = 1.12 -1.412E1
